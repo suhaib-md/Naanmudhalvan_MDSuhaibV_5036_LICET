@@ -1,0 +1,24 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>Songs | Melodio</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top:70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1>All Songs</h1>
+        </div>
+    </div>
+<div class="container">
+    <h2>Listen Later Songs</h2>
+    {% if listen_later_songs %}
+    <ul>
+        {% for song in listen_later_songs %}
+        <li>{{ song.title }}</li>
+        <!-- You can display more information about the song as needed -->
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No songs added to Listen Later.</p>
+    {% endif %}
+</div>
+{% endblock content%}

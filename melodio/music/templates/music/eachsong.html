@@ -1,0 +1,54 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>
+    {% if song %}
+        {{ song.title }}
+    {% elif uploaded_song %}
+        {{ uploaded_song.title }}
+    {% endif %}
+    | Melodio
+</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top: 120px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="row no-gutters">
+                    <div class="col-md-6">
+                        {% if song %}
+                            <img src="{{ song.album.cover_art.url }}" class="card-img" alt="{{ song.album.title }}">
+                        {% elif uploaded_song %}
+                            <!-- Handle uploaded song image if needed -->
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            {% if song %}
+                                <h5 class="card-title" style="color: green;">{{ song.title }}</h5>
+                                <p class="card-text"><b>Album:</b> {{ song.album.title }}</p>
+                                <p class="card-text"><b>Artist:</b> {{ song.album.artist.name }}</p>
+                                <p class="card-text">{{ song.album.artist.bio }}</p>
+                                <p class="card-text"><b>Duration:</b> {{ song.duration|duration_format }}</p>
+                                <audio controls class="mt-3" style="width: 100%;">
+                                    <source src="{{ song.file.url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            {% elif uploaded_song %}
+                            <h5 class="card-title" style="color: green;">{{ uploaded_song.title }}</h5>
+                            <p class="card-text"><b>Album:</b> {{ uploaded_song.album.title }}</p>
+                            <p class="card-text"><b>Artist:</b> {{ uploaded_song.album.artist.name }}</p>
+                            <p class="card-text">{{ uploaded_song.album.artist.bio }}</p>
+                            <p class="card-text"><b>Duration:</b> {{ uploaded_song.duration|duration_format }}</p>
+                            <audio controls class="mt-3" style="width: 100%;">
+                                <source src="{{ uploaded_song.file.url }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="dark">
+  <div class="container">
+      <!-- Logo -->
+      <a class="navbar-brand" href="{% url "home" %}">Melodio</a>
+
+      <!-- Centered Navigation -->
+      <div class="d-flex justify-content-center">
+          <ul class="navbar-nav">
+              <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{% url "home" %}">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url "allsongs" %}">All Songs</a>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Categories
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="{% url "genres" %}">Genres</a></li>
+                      <li><a class="dropdown-item" href="{% url "artists" %}">Artists</a></li>
+                      <li><a class="dropdown-item" href="{% url "all_albums" %}">Albums</a></li>
+                  </ul>
+              </li>
+          </ul>
+      </div>
+
+      <!-- Right-aligned Search, Signin, Signup -->
+      <div class="d-flex">
+          <form class="d-flex me-2" role="search" method="GET" action="{% url "search" %}">
+              <input name="query" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" >
+              <button class="btn btn-outline-success bg-success text-white" type="submit">Search</button>
+          </form>
+          {% if request.user.is_authenticated %}
+          <div class="d-flex d-block">
+            <button type="button" class="btn btn-primary me-2 fw-bold fs-5" ><i class="fa fa-user me-2"></i>{{ request.user }}</button>
+            <button type="button" class= "btn btn-warning me-2"><a class="nav-link" href="{% url "watchlater" %}">Listen later</a></button>
+            <button type="button" class= "btn btn-warning me-2"><a class="nav-link" href="{% url "uploadsong" %}">Upload Song</a></button>
+            <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+          </div>
+          {% else %}
+          <button type="button" class="btn btn-danger me-2" onclick="window.location.href='{% url 'login' %}'">Signin</button>
+          <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'register' %}'">Signup</button>
+          {% endif %}
+      </div>
+  </div>
+</nav>

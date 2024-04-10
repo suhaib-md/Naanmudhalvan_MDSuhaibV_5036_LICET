@@ -1,0 +1,30 @@
+{% extends "music/layouts/main.html" %}
+{% block title %}<title>Sign up | Melodio</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top:70px;">
+    
+    <section class="py-4 my-5" >
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <h1>Login page</h1>
+                    <hr>
+                    {% include "music/inc/message.html" %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+                        </div>
+                        <div class="mb-4">
+                            <label for="password1" class="form-label">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter Password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %} 

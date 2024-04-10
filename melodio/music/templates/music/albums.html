@@ -1,0 +1,27 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>Albums | Melodio</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top: 70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1>All Albums</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for album in albums %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ album.cover_art.url }}" class="card-img-top" alt="{{ album.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ album.title }}</h5>
+                    <p class="card-text"><b>Artist:</b> {{ album.artist.name }}</p>
+                    <p class="card-text"><b>Release Date:</b> {{ album.release_date }}</p>
+                    <a href="{% url 'album_songs' album.id %}" class="btn btn-primary">View Songs</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

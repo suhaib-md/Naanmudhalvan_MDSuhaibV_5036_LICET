@@ -1,0 +1,116 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>Melodio | Stream Music</title>{% endblock title %}
+{% block content %}
+{% include "music/inc/slider.html" %}
+<div class="container" style="margin-top:70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1>Welcome to Melodio</h1>
+        </div>
+        <hr>
+        <p class="fs-5">Welcome to Melodio, your ultimate destination for music streaming! 
+            At Melodio, we are passionate about bringing you the best music experience possible, 
+            with a vast library of songs spanning various genres and artists from around the globe. 
+            Whether you're into the latest hits, timeless classics, or exploring new sounds, Melodio has something for everyone.</p>
+        
+            <p class="fs-5">
+                With Melodio, you can discover new music and explore a world of sounds at your fingertips. 
+                Our intuitive interface makes it easy to browse through our extensive catalog of songs, 
+                albums, artists, and genres. From pop to rock, hip-hop to classical, 
+                and everything in between, you'll find music to suit every mood and occasion.
+            </p>
+    </div>
+</div>
+<div class="row" style="padding:50px;">
+    <h1>Albums</h1>
+    <hr>
+    {% for album in albums %}
+    <div class="col-md-4" style="margin-top:30px;">
+        <div class="card mb-4">
+            {% if album.cover_art %}
+        <img src="{{ album.cover_art.url }}" class="card-img-top" alt="{{ album.title }}">
+        {% else %}
+        <!-- Placeholder image or alternate content -->
+        <div class="no-image-placeholder">No Image Available</div>
+        {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ album.title }}</h5>
+                <p class="card-text"><b>Artist:</b> {{ album.artist.name }}</p>
+                <p class="card-text"><b>Release Date:</b> {{ album.release_date }}</p>
+                <a href="{% url 'album_songs' album.id %}" class="btn btn-primary">View Songs</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row" style="padding:50px;">
+    <h1>All Artists</h1>
+    <hr>
+    {% for artist in artists %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <img src="{{ artist.image.url }}" class="card-img-top" alt="{{ artist.name }}" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">{{ artist.name }}</h5>
+                <a href="{% url 'artist_songs' artist.id %}" class="btn btn-primary">View Songs</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row" style="padding:50px;">
+    <h1>Genres</h1>
+    <hr>
+    {% for genre in genres %}
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <img src="{{ genre.image.url }}" class="card-img-top" alt="{{ genre.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ genre.name }}</h5>
+                <a href="{% url 'genre_songs' genre.id %}" class="btn btn-primary">View Songs</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="row" style="padding:50px;">
+    <h1>Songs</h1>
+    <hr>
+    <br>
+    {% for song in all_songs %}
+    
+        <div class="card mb-3" style="max-width: 1020px; padding: 10px;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img src="{{ song.album.cover_art.url }}" class="card-img" alt="{{ song.album.title }}">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: green;">{{ song.title }}</h3>
+                        <h6 class="card-text">{{ song.album.artist.name }}</h6>
+                        <p class="card-text"><b>Album: </b>{{ song.album.title }}</p>
+                        <p class="card-text">{{ song.album.artist.bio }}</p>
+                        <p class="card-text"><b>Duration : </b>{{ song.duration|duration_format }}</p>
+                        <input type="hidden" value="{{song.id}}" id="sid">
+                        
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-warning me-2" onclick="window.location.href='{% url 'eachsong' song.id %}'">Listen Song</button>
+                            {% if request.user.is_authenticated %}
+                            <form action="{% url "watchlater" %}" method="POST">{% csrf_token %}
+                                <input type="hidden" name="song_id" value="{{song.id}}">
+                                <button class="btn btn-primary" id="btnAdd" type="submit">Add to Listen Later</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    {% endfor %}
+</div>
+
+{% endblock content %} 

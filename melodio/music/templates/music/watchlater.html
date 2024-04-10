@@ -1,0 +1,49 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>Listen later</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top:70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1>Listen later</h1>
+        </div>
+    </div>
+    {% if all_songs|length < 1 %}
+    
+    <h2 style="text-align:center; padding-bottom:150px;">You have no songs in watch later</h2>
+
+    {% endif %}
+    <div class="row">
+        {% for song in all_songs %}
+        {% include "music/inc/message.html" %}
+            <div class="card mb-3" style="max-width: 1020px; padding: 10px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ song.album.cover_art.url }}" class="card-img" alt="{{ song.album.title }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title" style="color: green;">{{ song.title }}</h3>
+                            <h6 class="card-text">{{ song.album.artist.name }}</h6>
+                            <p class="card-text"><b>Album: </b>{{ song.album.title }}</p>
+                            <p class="card-text">{{ song.album.artist.bio }}</p>
+                            <p class="card-text"><b>Duration : </b>{{ song.duration|duration_format }}</p>
+                            <input type="hidden" value="{{ song.id }}" name="song_id">
+                            
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-warning me-2" onclick="window.location.href='{% url 'eachsong' song.id %}'">Listen Song</button>
+                                <form action="{% url 'remove_from_watchlater' %}" method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="remove_song_id" value="{{ song.id }}">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

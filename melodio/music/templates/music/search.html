@@ -1,0 +1,46 @@
+{% extends "music/layouts/main.html" %}
+{% load custom_filters %}
+{% block title %}<title>Songs | Melodio</title>{% endblock title %}
+{% block content %}
+<div class="container" style="margin-top:70px;">
+    <div class="row">
+        <div class="col-12">
+            <h1>Search results</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for song in songs %}
+        
+            <div class="card mb-3" style="max-width: 1020px; padding: 10px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ song.album.cover_art.url }}" class="card-img" alt="{{ song.album.title }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 class="card-title" style="color: green;">{{ song.title }}</h3>
+                            <h6 class="card-text">{{ song.album.artist.name }}</h6>
+                            <p class="card-text"><b>Album: </b>{{ song.album.title }}</p>
+                            <p class="card-text">{{ song.album.artist.bio }}</p>
+                            <p class="card-text"><b>Duration : </b>{{ song.duration|duration_format }}</p>
+                            <input type="hidden" value="{{song.id}}" id="sid">
+                            
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-warning me-2" onclick="window.location.href='{% url 'eachsong' song.id %}'">Listen Song</button>
+                                {% if request.user.is_authenticated %}
+                                <form action="{% url "watchlater" %}" method="POST">{% csrf_token %}
+                                    <input type="hidden" name="song_id" value="{{song.id}}">
+                                    <button class="btn btn-primary" id="btnAdd" type="submit">Add to Listen Later</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+    </div>
+</div>  
+
+{% endblock content %}
